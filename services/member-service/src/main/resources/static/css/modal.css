@@ -1,0 +1,19 @@
+.password-change-button{margin-top:12px}
+.modal-backdrop{position:fixed;inset:0;display:none;place-items:center;padding:20px;background:rgba(15,23,42,.64);z-index:1000}
+.modal-backdrop.open{display:grid}
+.modal{width:min(480px,100%);max-height:calc(100vh - 40px);overflow:auto;background:#fff;color:#1e293b;border-radius:16px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.3)}
+.modal label{color:#1e293b}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-header h2{margin:0}
+.modal-close{border:0;background:none;color:#64748b;font-size:30px;line-height:1;cursor:pointer}
+.account-menu{position:relative}
+.account-menu summary{list-style:none;color:#fff;font-weight:700;cursor:pointer;user-select:none}
+.account-menu summary::-webkit-details-marker{display:none}
+.account-menu summary::after{content:'▾';display:inline-block;margin-left:7px;font-size:11px;transition:transform .15s}
+.account-menu[open] summary::after{transform:rotate(180deg)}
+.account-menu-panel{position:absolute;top:calc(100% + 14px);right:0;z-index:100;width:160px;padding:7px;background:#fff;border:1px solid #dbe2ea;border-radius:10px;box-shadow:0 14px 34px rgba(15,23,42,.2)}
+.account-menu-panel form{margin:0}
+.account-menu-button{width:100%;border:0;border-radius:7px;padding:10px 12px;background:#fff;color:#1e293b;text-align:left;font:inherit;font-weight:600;cursor:pointer}
+.account-menu-button:hover{background:#eef3ff;color:#244da8}
+.confirm-modal{width:min(400px,100%)}
+.confirm-message{margin:4px 0 26px;color:#475569;font-size:16px;line-height:1.6}

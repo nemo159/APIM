@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>권한 관리</title><link rel="stylesheet" th:href="@{/css/app.css}"><link rel="stylesheet" th:href="@{/css/modal.css}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="container">
+    <div class="page-title"><div><h1>권한 관리</h1></div></div>
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    <div class="table-wrap"><table><thead><tr><th>회원</th><th>현재 권한</th><th>변경</th></tr></thead><tbody>
+    <tr th:each="member : ${members}">
+        <td><strong th:text="${member.name}"></strong><small th:text="${member.phone}"></small></td>
+        <td th:text="${#strings.listJoin(member.roles, ', ')}"></td>
+        <td th:if="${!member.hasRole('MASTER')}">
+            <form th:action="@{/admin/roles/{id}(id=${member.id})}" method="post" class="role-form">
+                <label><input type="radio" name="role" value="ADMIN" th:checked="${member.hasRole('ADMIN')}" required> ADMIN</label>
+                <label><input type="radio" name="role" value="MEMBER" th:checked="${member.hasRole('MEMBER')}" required> MEMBER</label>
+                <button class="button secondary" type="submit">저장</button>
+            </form>
+        </td>
+        <td th:if="${member.hasRole('MASTER')}"></td>
+    </tr>
+    </tbody></table></div>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

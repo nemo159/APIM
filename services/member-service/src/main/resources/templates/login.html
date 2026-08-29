@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>로그인 | Study Member</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+</head>
+<body class="login-body">
+<main class="login-card">
+    <p class="eyebrow">STUDY MEMBER</p>
+    <h1>로그인</h1>
+    <p class="muted">이름과 비밀번호를 입력해 주세요.</p>
+    <div class="alert error" th:if="${param.error}">이름 또는 비밀번호가 올바르지 않습니다.</div>
+    <div class="alert success" th:if="${param.logout}">로그아웃되었습니다.</div>
+    <div class="alert success" th:if="${passwordChangedMessage}" th:text="${passwordChangedMessage}"></div>
+    <form th:action="@{/login}" method="post" class="stack-form">
+        <label>이름
+            <input type="text" name="username" autocomplete="username" required autofocus>
+        </label>
+        <label>비밀번호
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+        <button class="button primary wide" type="submit">로그인</button>
+    </form>
+    <button class="button secondary wide password-change-button" type="button" data-open-password-modal>비밀번호 변경</button>
+    <p class="help">처음 로그인할 때 비밀번호는 핸드폰 번호에서 하이픈(-)을 뺀 숫자입니다.</p>
+</main>
+<div class="modal-backdrop" id="password-modal" th:classappend="${openPasswordModal == true or param.changePassword != null} ? ' open'" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="password-modal-title">
+        <div class="modal-header"><h2 id="password-modal-title">비밀번호 변경</h2><button type="button" class="modal-close" data-close-password-modal aria-label="닫기">×</button></div>
+        <form th:action="@{/password/change}" th:object="${form}" method="post" class="stack-form">
+            <div class="alert error" th:if="${#fields.hasGlobalErrors()}" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+            <label>이름<input type="text" th:field="*{username}" autocomplete="username" required></label>
+            <small class="field-error" th:errors="*{username}"></small>
+            <label>현재 비밀번호<input type="password" th:field="*{currentPassword}" autocomplete="current-password" required></label>
+            <small class="field-error" th:errors="*{currentPassword}"></small>
+            <label>새 비밀번호<input type="password" th:field="*{newPassword}" autocomplete="new-password" required></label>
+            <small class="field-error" th:errors="*{newPassword}"></small>
+            <label>새 비밀번호 확인<input type="password" th:field="*{newPasswordConfirm}" autocomplete="new-password" required></label>
+            <small class="field-error" th:errors="*{newPasswordConfirm}"></small>
+            <div class="actions"><button class="button ghost" type="button" data-close-password-modal>취소</button><button class="button primary" type="submit">변경</button></div>
+        </form>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

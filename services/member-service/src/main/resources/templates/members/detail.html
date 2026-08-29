@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>회원 상세</title><link rel="stylesheet" th:href="@{/css/app.css}"><link rel="stylesheet" th:href="@{/css/modal.css}"><link rel="stylesheet" th:href="@{/css/member-form.css}"></head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="container narrow">
+    <div class="page-title"><div><h1 th:text="${member.name}">회원</h1></div><a class="button secondary" th:href="@{/members}">목록</a></div>
+    <div class="alert success" th:if="${message}" th:text="${message}"></div><div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    <section class="panel detail-grid">
+        <div><span>이름</span><strong th:text="${member.name}"></strong></div>
+        <div><span>사용여부</span><strong th:text="${member.delYn == 'Y'} ? '사용' : '미사용'"></strong></div>
+        <div><span>권한</span><strong th:text="${#strings.listJoin(member.roles, ', ')}"></strong></div>
+        <div><span>등록일</span><strong th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm')}"></strong></div>
+        <div><span>수정일</span><strong th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm')}"></strong></div>
+        <div><span>등록자 / 수정자</span><strong th:text="|${member.createdBy} / ${member.updatedBy}|"></strong></div>
+    </section>
+    <form th:if="${canManageMembers}" class="panel stack-form" th:action="@{/members/{id}/phone(id=${member.id})}" method="post">
+        <h2>핸드폰 번호 수정</h2><label>핸드폰 번호<input type="tel" class="phone-input" name="phone" th:value="${member.phone}" maxlength="13" inputmode="numeric" required></label>
+        <div class="actions"><button class="button primary" type="submit">수정</button></div>
+    </form>
+    <section th:unless="${canManageMembers}" class="panel"><span class="label">핸드폰 번호</span><p th:text="${member.phone}"></p></section>
+    <form th:if="${canManageMembers and member.delYn == 'Y' and !member.hasRole('MASTER') and !member.name.equalsIgnoreCase(loginName)}" th:action="@{/members/{id}/delete(id=${member.id})}" method="post" class="danger-zone">
+        <div><strong>회원 삭제</strong><p>데이터는 보존되고 사용여부가 미사용으로 변경됩니다.</p></div>
+        <button class="button danger" type="submit" onclick="return confirm('이 회원을 삭제 처리할까요?')">삭제</button>
+    </form>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

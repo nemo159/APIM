@@ -1,0 +1,2 @@
+ALTER TABLE members
+    ALTER COLUMN del_yn TYPE VARCHAR(1);

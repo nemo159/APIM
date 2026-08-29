@@ -14,6 +14,13 @@ spring:
   flyway:
     enabled: true
 
+  thymeleaf:
+    cache: false
+
+app:
+  crypto:
+    key: ${APP_ENCRYPTION_KEY}
+
 server:
   port: 8080
 

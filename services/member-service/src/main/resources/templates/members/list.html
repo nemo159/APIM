@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>회원 목록</title><link rel="stylesheet" th:href="@{/css/app.css}"><link rel="stylesheet" th:href="@{/css/modal.css}"><link rel="stylesheet" th:href="@{/css/member-search.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="container">
+    <div class="page-title">
+        <div><h1>회원 목록</h1></div>
+        <a th:if="${canManageMembers}" class="button primary" th:href="@{/members/new}">회원 등록</a>
+    </div>
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    <form class="search-panel" method="get" th:action="@{/members}">
+        <label>이름<input type="text" name="name" th:value="${name}" placeholder="이름 검색"></label>
+        <label>핸드폰 번호<input type="text" name="phone" th:value="${phone}" placeholder="하이픈 없이 숫자 입력" maxlength="11" inputmode="numeric" pattern="[0-9]*"></label>
+        <button class="button secondary" type="submit">검색</button>
+        <a class="button ghost" th:href="@{/members}">초기화</a>
+    </form>
+    <form th:action="@{/members/delete}" method="post">
+        <div class="table-actions" th:if="${canManageMembers}"><button class="button danger" type="submit" onclick="return confirm('선택한 회원을 삭제 처리할까요?')">선택 삭제</button></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr>
+                    <th th:if="${canManageMembers}"><input type="checkbox" onclick="document.querySelectorAll('input[name=ids]:not(:disabled)').forEach(item => item.checked = this.checked)"></th>
+                    <th>이름</th><th>핸드폰 번호</th><th>사용여부</th><th>등록일</th><th>수정일</th><th>등록자</th><th>수정자</th>
+                </tr></thead>
+                <tbody>
+                <tr th:each="member : ${members.content}">
+                    <td th:if="${canManageMembers}"><input type="checkbox" name="ids" th:value="${member.id}" th:disabled="${member.hasRole('MASTER') or member.name.equalsIgnoreCase(loginName)}" th:title="${member.hasRole('MASTER')} ? 'MASTER 계정은 삭제할 수 없습니다.' : (${member.name.equalsIgnoreCase(loginName)} ? '현재 로그인한 본인 계정은 삭제할 수 없습니다.' : '')"></td>
+                    <td><a th:href="@{/members/{id}(id=${member.id})}" th:text="${member.name}"></a></td>
+                    <td th:text="${member.phone}"></td>
+                    <td><span class="badge" th:classappend="${member.delYn == 'Y'} ? ' active' : ' deleted'" th:text="${member.delYn == 'Y'} ? '사용' : '미사용'"></span></td>
+                    <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${member.createdBy}"></td><td th:text="${member.updatedBy}"></td>
+                </tr>
+                <tr th:if="${members.empty}"><td colspan="8" class="empty">조회된 회원이 없습니다.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <nav class="pagination" th:if="${members.totalPages > 1}">
+        <a th:if="${members.hasPrevious()}" th:href="@{/members(page=${members.number - 1},name=${name},phone=${phone})}">이전</a>
+        <a th:each="p : ${#numbers.sequence(0, members.totalPages - 1)}" th:href="@{/members(page=${p},name=${name},phone=${phone})}" th:text="${p + 1}" th:classappend="${p == members.number} ? ' current'"></a>
+        <a th:if="${members.hasNext()}" th:href="@{/members(page=${members.number + 1},name=${name},phone=${phone})}">다음</a>
+    </nav>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
