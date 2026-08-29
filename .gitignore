@@ -1,0 +1,16 @@
+.env
+
+# Local Gradle cache accidentally created at repository root
+/gradle/
+
+# IDE workspace metadata and generated output
+**/.metadata/
+**/.gradle/
+**/.settings/
+**/.classpath
+**/.project
+**/bin/
+**/build/
+
+# Downloaded project archives
+**/*.zip
