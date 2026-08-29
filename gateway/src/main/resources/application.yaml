@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: member-service
+              uri: ${MEMBER_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/member/**
+            - id: work-service
+              uri: ${WORK_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/work/**
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

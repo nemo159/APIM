@@ -2,6 +2,7 @@
 
 # Local Gradle cache accidentally created at repository root
 /gradle/
+**/repository/
 
 # IDE workspace metadata and generated output
 **/.metadata/

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: work-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:15433/workdb}
+    username: ${DB_USERNAME:workapp}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+server:
+  port: 8082
+  servlet:
+    context-path: /work
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
